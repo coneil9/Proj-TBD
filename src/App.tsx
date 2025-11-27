@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import CSSExportPanel from './components/CSSExportPanel';
 import GradientControls from './components/GradientControls';
 import GradientPreview from './components/GradientPreview';
+import PresetsPanel from './components/PresetsPanel';
 import { GradientState, GradientType } from './types/gradient';
 import {
   buildCssGradientString,
@@ -9,11 +10,26 @@ import {
   defaultGradient,
   normalizeStops,
 } from './utils/gradient';
+import {
+  loadGradientFromLocalStorage,
+  loadPresets,
+  Preset,
+  saveGradientToLocalStorage,
+  savePresets,
+} from './utils/storage';
 
 const App = () => {
-  const [gradient, setGradient] = useState<GradientState>(defaultGradient);
+  const [gradient, setGradient] = useState<GradientState>(() => {
+    const saved = loadGradientFromLocalStorage();
+    return saved ?? defaultGradient;
+  });
+  const [presets, setPresets] = useState<Preset[]>(() => loadPresets());
 
   const gradientString = useMemo(() => buildCssGradientString(gradient), [gradient]);
+
+  useEffect(() => {
+    saveGradientToLocalStorage(gradient);
+  }, [gradient]);
 
   const handleTypeChange = (type: GradientType) => {
     setGradient((prev) => ({ ...prev, type }));
@@ -28,7 +44,9 @@ const App = () => {
       ...prev,
       stops: normalizeStops(
         prev.stops.map((stop) =>
-          stop.id === id ? { ...stop, ...partial, position: clamp(partial.position ?? stop.position, 0, 100) } : stop,
+          stop.id === id
+            ? { ...stop, ...partial, position: clamp(partial.position ?? stop.position, 0, 100) }
+            : stop,
         ),
       ),
     }));
@@ -85,6 +103,27 @@ const App = () => {
     }
   };
 
+  const handleSavePreset = (name: string) => {
+    const newPreset: Preset = {
+      ...gradient,
+      id: crypto.randomUUID(),
+      name,
+    };
+    setPresets((prev) => {
+      const next = [...prev, newPreset];
+      savePresets(next);
+      return next;
+    });
+  };
+
+  const handleLoadPreset = (preset: Preset) => {
+    setGradient({
+      type: preset.type,
+      angle: preset.angle,
+      stops: preset.stops,
+    });
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50 relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0">
@@ -115,8 +154,8 @@ const App = () => {
             <div className="text-xs uppercase tracking-[0.24em] text-slate-400 mb-1">Phase</div>
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-emerald-400" />
-              <span className="font-semibold text-white">05</span>
-              <span className="text-slate-400">Interactive controls wired</span>
+              <span className="font-semibold text-white">07</span>
+              <span className="text-slate-400">Presets & persistence</span>
             </div>
           </div>
         </header>
@@ -137,12 +176,15 @@ const App = () => {
             <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-lg p-6 shadow-[0_20px_80px_rgba(0,0,0,0.45)]">
               <CSSExportPanel gradientString={gradientString} onCopy={handleCopy} />
             </div>
+            <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-lg p-6 shadow-[0_20px_80px_rgba(0,0,0,0.45)]">
+              <PresetsPanel presets={presets} onSave={handleSavePreset} onLoad={handleLoadPreset} />
+            </div>
           </div>
           <GradientPreview gradientString={gradientString} />
         </main>
 
         <footer className="text-sm text-slate-400 border-t border-white/10 pt-4">
-          Up next: richer controls UI, presets, and polish.
+          Next: small UX polish and responsive tweaks.
         </footer>
       </div>
     </div>
