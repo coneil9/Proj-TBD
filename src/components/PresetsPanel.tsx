@@ -97,11 +97,11 @@ const PresetsPanel = ({ presets, onSave, onLoad }: Props) => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Name your preset"
-          className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-100"
+          className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-100 focus:border-cyan-400/60 focus:outline-none"
         />
         <button
           type="submit"
-          className="px-3 py-2 text-sm rounded-lg border border-cyan-400/40 text-cyan-200 bg-cyan-500/10"
+          className="px-3 py-2 text-sm rounded-lg border border-cyan-400/40 text-cyan-200 bg-cyan-500/10 hover:border-cyan-300/60 transition"
         >
           Save
         </button>

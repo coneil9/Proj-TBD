@@ -24,6 +24,7 @@ const App = () => {
     return saved ?? defaultGradient;
   });
   const [presets, setPresets] = useState<Preset[]>(() => loadPresets());
+  const [copied, setCopied] = useState(false);
 
   const gradientString = useMemo(() => buildCssGradientString(gradient), [gradient]);
 
@@ -98,6 +99,8 @@ const App = () => {
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(`background: ${gradientString};`);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1400);
     } catch (err) {
       console.error('Failed to copy gradient CSS', err);
     }
@@ -174,7 +177,7 @@ const App = () => {
               />
             </div>
             <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-lg p-6 shadow-[0_20px_80px_rgba(0,0,0,0.45)]">
-              <CSSExportPanel gradientString={gradientString} onCopy={handleCopy} />
+              <CSSExportPanel gradientString={gradientString} onCopy={handleCopy} copied={copied} />
             </div>
             <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-lg p-6 shadow-[0_20px_80px_rgba(0,0,0,0.45)]">
               <PresetsPanel presets={presets} onSave={handleSavePreset} onLoad={handleLoadPreset} />

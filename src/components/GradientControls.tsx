@@ -98,7 +98,7 @@ const GradientControls = ({
             </p>
           </div>
           <button
-            className="px-3 py-1 text-xs rounded-lg border border-cyan-400/40 text-cyan-200 bg-cyan-500/10"
+            className="px-3 py-1 text-xs rounded-lg border border-cyan-400/40 text-cyan-200 bg-cyan-500/10 hover:border-cyan-300/60 transition"
             type="button"
             onClick={onAddStop}
           >
