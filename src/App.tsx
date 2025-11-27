@@ -31,11 +31,21 @@ const App = () => {
 
   const handleAddStop = () => {
     setGradient((prev) => {
-      const nextPosition = Math.round(Math.random() * 100);
+      const sorted = normalizeStops(prev.stops);
+      // Insert new stop in the widest gap for a sensible default placement.
+      let maxGap = -1;
+      let insertAt = 50;
+      for (let i = 0; i < sorted.length - 1; i += 1) {
+        const gap = sorted[i + 1].position - sorted[i].position;
+        if (gap > maxGap) {
+          maxGap = gap;
+          insertAt = Math.round(sorted[i].position + gap / 2);
+        }
+      }
       const nextStop = {
         id: crypto.randomUUID(),
         color: '#ffffff',
-        position: nextPosition,
+        position: insertAt,
       };
       return { ...prev, stops: normalizeStops([...prev.stops, nextStop]) };
     });
@@ -43,6 +53,23 @@ const App = () => {
 
   const handleRemoveStop = (id: string) => {
     setGradient((prev) => ({ ...prev, stops: prev.stops.filter((stop) => stop.id !== id) }));
+  };
+
+  // Move a color stop up/down to tweak ordering without changing positions.
+  const handleReorderStop = (id: string, direction: 'up' | 'down') => {
+    setGradient((prev) => {
+      const idx = prev.stops.findIndex((stop) => stop.id === id);
+      if (idx === -1) return prev;
+
+      const targetIdx = direction === 'up' ? idx - 1 : idx + 1;
+      if (targetIdx < 0 || targetIdx >= prev.stops.length) return prev;
+
+      const nextStops = [...prev.stops];
+      const [moved] = nextStops.splice(idx, 1);
+      nextStops.splice(targetIdx, 0, moved);
+
+      return { ...prev, stops: nextStops };
+    });
   };
 
   const handleCopy = async () => {
@@ -83,8 +110,8 @@ const App = () => {
             <div className="text-xs uppercase tracking-[0.24em] text-slate-400 mb-1">Phase</div>
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-emerald-400" />
-              <span className="font-semibold text-white">04</span>
-              <span className="text-slate-400">State + gradient logic wired</span>
+              <span className="font-semibold text-white">05</span>
+              <span className="text-slate-400">Interactive controls wired</span>
             </div>
           </div>
         </header>
@@ -99,6 +126,7 @@ const App = () => {
                 onStopChange={handleStopChange}
                 onAddStop={handleAddStop}
                 onRemoveStop={handleRemoveStop}
+                onReorderStop={handleReorderStop}
               />
             </div>
             <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-lg p-6 shadow-[0_20px_80px_rgba(0,0,0,0.45)]">
