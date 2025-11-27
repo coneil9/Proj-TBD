@@ -23,7 +23,7 @@ const GradientControls = ({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs uppercase tracking-[0.3em] text-cyan-300 font-semibold">Phase 5</p>
+          <p className="text-xs uppercase tracking-[0.3em] text-cyan-300 font-semibold"></p>
           <h2 className="text-xl font-semibold">Gradient Controls</h2>
           <p className="text-sm text-slate-400">
             Linear/radial toggle, angle input, and editable color stops.

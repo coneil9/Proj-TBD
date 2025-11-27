@@ -187,7 +187,9 @@ const App = () => {
         </main>
 
         <footer className="text-sm text-slate-400 border-t border-white/10 pt-4">
-          Next: small UX polish and responsive tweaks.
+          Created by Carter O'Neil
+          If you enjoy, hit me up!
+          carterrossoneil@gmail.com
         </footer>
       </div>
     </div>
