@@ -23,9 +23,9 @@ const GradientPreview = ({ gradientString }: Props) => {
         </div>
         <div className="p-6">
           <div className="relative aspect-[4/3] rounded-2xl border border-white/10 overflow-hidden">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_10%,rgba(255,255,255,0.06),transparent_35%),radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.08),transparent_30%),radial-gradient(circle_at_30%_80%,rgba(255,255,255,0.05),transparent_35%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.06) 25%,transparent 25%),linear-gradient(-45deg,rgba(255,255,255,0.06) 25%,transparent 25%),linear-gradient(45deg,transparent 75%,rgba(255,255,255,0.06) 75%),linear-gradient(-45deg,transparent 75%,rgba(255,255,255,0.06) 75%)] bg-[length:20px_20px] bg-[position:0_0,0_10px,10px_-10px,-10px_0px]" />
             <div
-              className="absolute inset-0"
+              className="absolute inset-0 transition-all duration-300 ease-out"
               style={{
                 backgroundImage: gradientString,
               }}

@@ -3,7 +3,12 @@ import CSSExportPanel from './components/CSSExportPanel';
 import GradientControls from './components/GradientControls';
 import GradientPreview from './components/GradientPreview';
 import { GradientState, GradientType } from './types/gradient';
-import { buildCssGradientString, clamp, defaultGradient, normalizeStops } from './utils/gradient';
+import {
+  buildCssGradientString,
+  clamp,
+  defaultGradient,
+  normalizeStops,
+} from './utils/gradient';
 
 const App = () => {
   const [gradient, setGradient] = useState<GradientState>(defaultGradient);

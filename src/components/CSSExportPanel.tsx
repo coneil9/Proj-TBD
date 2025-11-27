@@ -20,7 +20,11 @@ const CSSExportPanel = ({ gradientString, onCopy }: Props) => {
         </button>
       </div>
       <div className="rounded-xl border border-white/10 bg-black/40 overflow-hidden">
-        <pre className="text-xs text-slate-200 p-4 whitespace-pre-wrap">{`background: ${gradientString};`}</pre>
+        <div className="flex items-center justify-between px-4 py-2 text-[11px] uppercase tracking-[0.2em] text-slate-400 bg-white/5 border-b border-white/10">
+          <span>CSS</span>
+          <span className="text-cyan-200">background</span>
+        </div>
+        <pre className="text-xs text-slate-200 p-4 whitespace-pre-wrap font-mono">{`background: ${gradientString};`}</pre>
       </div>
     </div>
   );
